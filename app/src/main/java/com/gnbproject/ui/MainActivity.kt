@@ -1,7 +1,8 @@
-package com.gnbproject
+package com.gnbproject.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.gnbproject.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
