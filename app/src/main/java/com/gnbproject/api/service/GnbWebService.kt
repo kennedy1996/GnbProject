@@ -10,16 +10,23 @@ class GnbWebService {
     private val gnbApiService: GnbApi =
         InicializatorRetrofit().gndbApi
 
-    suspend fun getTransactions(): List<GnbApiDtos.Transactions>{
+    suspend fun getTransactions(){
         var returnV =  mutableListOf<GnbApiDtos.Transactions>()
         try {
-            val noaGetTableReturn = gnbApiService
-                .transactions()
+            val geReturn = gnbApiService
+                .rates()
+
+            Log.i(TAG, "getTransactions: ${
+                geReturn.size
+            }")
+
+            geReturn.forEach {
+                Log.i(TAG, "${it.form} | ${it.to}")
+            }
 
         } catch (e: Exception) {
             Log.e(TAG, "noaApiService Table: ", e)
         }
-        return returnV
     }
 
 }
