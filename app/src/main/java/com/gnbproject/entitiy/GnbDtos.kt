@@ -1,6 +1,6 @@
-package com.gnbproject.api.entity
+package com.gnbproject.entitiy
 
-class GnbApiDtos {
+class GnbDtos {
 
     class Transactions(
         val sku: String,
