@@ -64,10 +64,23 @@
                 android:textColor="#F3F0F0"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                android:visibility="gone"
+                tools:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/activity_main_image_back_currency"
                 app:layout_constraintEnd_toEndOf="@+id/activity_main_text_change_currency"
                 app:layout_constraintStart_toEndOf="@+id/activity_main_image_back_currency"
                 app:layout_constraintTop_toTopOf="@+id/activity_main_image_back_currency" />
+
+            <ImageView
+                android:id="@+id/activity_main_image_update_data"
+                android:layout_width="40dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_main_text_change_currency"
+                app:srcCompat="@drawable/ic_baseline_refresh_24" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

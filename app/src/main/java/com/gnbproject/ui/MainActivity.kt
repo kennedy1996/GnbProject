@@ -1,18 +1,20 @@
 package com.gnbproject.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.gnbproject.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gnbproject.databinding.ActivityMainBinding
+import com.gnbproject.ui.recyclerView.GnbAdapter
 import com.gnbproject.ui.viewModel.GnbViewModel
+import com.gnbproject.util.showDialogChangeCurrency
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private var adapterRecyclerView: RecyclerView.Adapter<GnbAdapter.ViewHolder>? = null
 
     private val viewModel by lazy {
         val provider = ViewModelProvider(this)
@@ -23,29 +25,58 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        searchData()
+        settingsRecyclerView()
+        checkingLiveData()
+        actionButtonBackInitialData()
+        actionButtonUpdateData()
+        actionClickChangeAllCurrencies()
+    }
 
+    private fun searchData() {
         viewModel.searchRates()
         viewModel.searchTransaction()
+    }
 
-        Handler(Looper.getMainLooper()).postDelayed({
+    private fun settingsRecyclerView() {
+        binding.activityMainRecyclerView.layoutManager = LinearLayoutManager(this)
 
-            viewModel.listRates().forEach {
-                Log.i("listRates", "currency: $it")
-            }
+        adapterRecyclerView = GnbAdapter(
+            this,
+            viewModel
+        )
+        binding.activityMainRecyclerView.adapter = adapterRecyclerView
+    }
 
-            viewModel.getTransaction().value!!.forEach {
-                Log.i("listRates", "transaction: ${it.amount} ${it.sku} ${it.currency}")
-            }
-            Log.i("listRates", "tudo para EUR.....")
+    private fun checkingLiveData() {
+        viewModel.getTransaction()?.observe(this, Observer { list ->
+            adapterRecyclerView!!.notifyDataSetChanged()
+        })
+    }
 
-            viewModel.convertAllTransaction("EUR")
+    private fun actionButtonBackInitialData() {
+        binding.activityMainImageBackCurrency.setOnClickListener {
+            viewModel.backInitialTransaction()
+            adapterRecyclerView!!.notifyDataSetChanged()
+            binding.activityMainTextCurrencyNow.text = "Original Currency"
+        }
+    }
 
-            viewModel.getTransaction().value!!.forEach {
-                Log.i("listRates", "transaction: ${it.amount} ${it.sku} ${it.currency}")
-            }
+    private fun actionButtonUpdateData() {
+        binding.activityMainImageUpdateData.setOnClickListener {
+            searchData()
+            adapterRecyclerView!!.notifyDataSetChanged()
+            binding.activityMainTextCurrencyNow.text = "Original Currency"
+        }
+    }
 
-
-
-        }, 10000)
+    private fun actionClickChangeAllCurrencies() {
+        binding.activityMainTextChangeCurrency.setOnClickListener {
+            showDialogChangeCurrency(
+                this,
+                viewModel,
+                currencyNow = binding.activityMainTextCurrencyNow
+            )
+        }
     }
 }
