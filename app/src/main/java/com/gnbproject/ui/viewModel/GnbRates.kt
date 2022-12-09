@@ -1,6 +1,7 @@
 package com.gnbproject.ui.viewModel
 
 import com.gnbproject.entitiy.GnbDtos
+import com.gnbproject.util.arround
 
 class GnbRates {
 
@@ -24,7 +25,7 @@ class GnbRates {
                     GnbDtos.Rates(
                         it.to,
                         it.from,
-                        1 / it.rate
+                        arround(1 / it.rate)
                     )
                 )
             }
@@ -34,7 +35,7 @@ class GnbRates {
 
     fun converterDirect(value: Double, from: String, to: String): Double {
         val filter = ratesNew.filter { it.from == from && it.to == to }[0].rate
-        return filter * value
+        return arround(filter * value)
     }
 
 
@@ -67,31 +68,43 @@ class GnbRates {
     fun convert(value: Double, from: String, to: String): List<GnbDtos.Rates> {
         var returnV = mutableListOf<GnbDtos.Rates>()
         val filterDirect = ratesNew.any { it.from == from && it.to == to }
-        if (filterDirect) {
-            returnV.add(GnbDtos.Rates(from, to, converterDirect(value, from, to)))
+        if (from == to) {
+            returnV.add(GnbDtos.Rates(from, to, value))
         } else {
-            val filterFrom = ratesNew.filter { it.from == from }
-            val filterFromStartTo = ratesNew.filter { it.from == filterFrom[0].to && it.to == to }
-            if (filterFromStartTo.isNotEmpty()) {
-                val firstChange = converterDirect(value, filterFrom[0].from, filterFrom[0].to)
-                val secondChange = converterDirect(firstChange, filterFrom[0].to, to)
-                returnV.add(GnbDtos.Rates(filterFrom[0].to, to, secondChange))
+            if (filterDirect) {
+                returnV.add(GnbDtos.Rates(from, to, converterDirect(value, from, to)))
             } else {
-                val firstChange = converterDirect(value, filterFrom[0].from, filterFrom[0].to)
-                val newFilter = ratesNew.filter { it.from == filterFrom[0].to && it.to == to }
-                if (newFilter.isNotEmpty()) {
-                    returnV.add(
-                        GnbDtos.Rates(
-                            newFilter[0].from,
-                            to,
-                            converterDirect(firstChange, newFilter[0].from, to)
-                        )
-                    )
+                val filterFrom = ratesNew.filter { it.from == from }
+                val filterFromStartTo =
+                    ratesNew.filter { it.from == filterFrom[0].to && it.to == to }
+                if (filterFromStartTo.isNotEmpty()) {
+                    val firstChange = converterDirect(value, filterFrom[0].from, filterFrom[0].to)
+                    val secondChange = converterDirect(firstChange, filterFrom[0].to, to)
+                    returnV.add(GnbDtos.Rates(filterFrom[0].to, to, secondChange))
                 } else {
-                    returnV.add(GnbDtos.Rates(filterFrom[0].from, filterFrom[0].to, firstChange))
+                    val firstChange = converterDirect(value, filterFrom[0].from, filterFrom[0].to)
+                    val newFilter = ratesNew.filter { it.from == filterFrom[0].to && it.to == to }
+                    if (newFilter.isNotEmpty()) {
+                        returnV.add(
+                            GnbDtos.Rates(
+                                newFilter[0].from,
+                                to,
+                                converterDirect(firstChange, newFilter[0].from, to)
+                            )
+                        )
+                    } else {
+                        returnV.add(
+                            GnbDtos.Rates(
+                                filterFrom[0].from,
+                                filterFrom[0].to,
+                                firstChange
+                            )
+                        )
+                    }
                 }
             }
         }
+
         return returnV
     }
 }

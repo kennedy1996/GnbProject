@@ -2,6 +2,8 @@ package com.gnbproject.api.service
 
 import android.util.Log
 import com.gnbproject.entitiy.GnbDtos
+import com.gnbproject.util.arround
+import kotlin.math.roundToInt
 
 
 private const val TAG = "GnbWebService"
@@ -35,8 +37,9 @@ class GnbWebService {
                 .transactions()
 
             apiReturn.forEach {
-                returnV.add(GnbDtos.Transactions(it.sku, it.amount, it.currency))
-                Log.i(TAG, "${it.sku} | ${it.amount}| ${it.currency}")
+
+                returnV.add(GnbDtos.Transactions(it.sku, arround(it.amount), it.currency))
+                Log.i(TAG, "${it.sku} | ${arround(it.amount)}| ${it.currency}")
             }
 
         } catch (e: Exception) {

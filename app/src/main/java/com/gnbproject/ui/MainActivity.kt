@@ -1,6 +1,9 @@
 package com.gnbproject.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.gnbproject.R
@@ -20,6 +23,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel.getRates()
+        viewModel.searchRates()
+        viewModel.searchTransaction()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+
+            viewModel.listRates().forEach {
+                Log.i("listRates", "currency: $it")
+            }
+
+            viewModel.getTransaction().value!!.forEach {
+                Log.i("listRates", "transaction: ${it.amount} ${it.sku} ${it.currency}")
+            }
+            Log.i("listRates", "tudo para EUR.....")
+
+            viewModel.convertAllTransaction("EUR")
+
+            viewModel.getTransaction().value!!.forEach {
+                Log.i("listRates", "transaction: ${it.amount} ${it.sku} ${it.currency}")
+            }
+
+
+
+        }, 10000)
     }
 }

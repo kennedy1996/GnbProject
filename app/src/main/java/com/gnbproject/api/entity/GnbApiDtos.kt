@@ -4,7 +4,7 @@ class GnbApiDtos {
 
     class Transactions(
         val sku: String,
-        val amount: Float,
+        val amount: Double,
         val currency: String
     )
 
