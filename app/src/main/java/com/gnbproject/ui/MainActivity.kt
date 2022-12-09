@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.gnbproject.R
 import com.gnbproject.databinding.ActivityMainBinding
 import com.gnbproject.ui.recyclerView.GnbAdapter
 import com.gnbproject.ui.viewModel.GnbViewModel
@@ -51,8 +52,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkingLiveData() {
         viewModel.getTransaction()?.observe(this, Observer { list ->
-            if(list.isNotEmpty()) binding.activityMainProgressBar.visibility= View.GONE
-            else binding.activityMainProgressBar.visibility= View.VISIBLE
+            if (list.isNotEmpty()) binding.activityMainProgressBar.visibility = View.GONE
+            else binding.activityMainProgressBar.visibility = View.VISIBLE
             adapterRecyclerView!!.notifyDataSetChanged()
         })
     }
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         binding.activityMainImageBackCurrency.setOnClickListener {
             viewModel.backInitialTransaction()
             adapterRecyclerView!!.notifyDataSetChanged()
-            binding.activityMainTextCurrencyNow.text = "Original Currency"
+            binding.activityMainTextCurrencyNow.text = getString(R.string.original_currency)
         }
     }
 
@@ -69,18 +70,18 @@ class MainActivity : AppCompatActivity() {
         binding.activityMainImageUpdateData.setOnClickListener {
             searchData()
             adapterRecyclerView!!.notifyDataSetChanged()
-            binding.activityMainTextCurrencyNow.text = "Original Currency"
+            binding.activityMainTextCurrencyNow.text = getString(R.string.original_currency)
         }
     }
 
     private fun actionClickChangeAllCurrencies() {
         binding.activityMainTextChangeCurrency.setOnClickListener {
-            if(viewModel.getTransaction().value!!.isNotEmpty())
-            showDialogChangeCurrency(
-                this,
-                viewModel,
-                currencyNow = binding.activityMainTextCurrencyNow
-            )
+            if (viewModel.getTransaction().value!!.isNotEmpty())
+                showDialogChangeCurrency(
+                    this,
+                    viewModel,
+                    currencyNow = binding.activityMainTextCurrencyNow
+                )
         }
     }
 }

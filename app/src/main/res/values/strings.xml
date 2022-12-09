@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">GnbProject</string>
+    <string name="original_currency">Original Currency</string>
+    <string name="select_currency">Select Currency</string>
+    <string name="currency_now">Currency now is</string>
+    <string name="click_select_currency">Click Here to select and change Currency</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 </resources>

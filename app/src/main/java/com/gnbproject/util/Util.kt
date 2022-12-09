@@ -2,8 +2,10 @@ package com.gnbproject.util
 
 import android.app.AlertDialog
 import android.content.Context
+import android.provider.Settings.System.getString
 import android.view.View
 import android.widget.TextView
+import com.gnbproject.R
 import com.gnbproject.ui.viewModel.GnbViewModel
 import kotlin.math.roundToInt
 
@@ -24,19 +26,19 @@ fun showDialogChangeCurrency(
     for (i in listCurrencies.indices) {
         arrayCurrencies[i] = listCurrencies[i]
     }
-    alertDialog.setTitle("Select Currency")
+    alertDialog.setTitle(context.getString(R.string.select_currency))
     alertDialog.setSingleChoiceItems(arrayCurrencies, clickedItem) { dialog, which ->
         clickedItem = which
     }
-    alertDialog.setPositiveButton("OK") { _, _ ->
+    alertDialog.setPositiveButton(context.getString(R.string.ok)) { _, _ ->
         if (position == null) {
             viewModel.convertAllTransaction(arrayCurrencies[clickedItem]!!)
             currencyNow!!.visibility = View.VISIBLE
-            currencyNow!!.text = "Currency now is ${arrayCurrencies[clickedItem]!!}"
+            currencyNow!!.text = "${context.getString(R.string.currency_now)} ${arrayCurrencies[clickedItem]!!}"
         } else
             viewModel.convertSingleTransaction(arrayCurrencies[clickedItem]!!, position)
     }
-        .setNegativeButton("Cancel", null)
+        .setNegativeButton(context.getString(R.string.cancel), null)
         .create()
         .show()
 }
