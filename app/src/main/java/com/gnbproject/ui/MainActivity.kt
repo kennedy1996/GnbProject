@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun actionClickChangeAllCurrencies() {
         binding.activityMainTextChangeCurrency.setOnClickListener {
+            if(viewModel.getTransaction().value!!.isNotEmpty())
             showDialogChangeCurrency(
                 this,
                 viewModel,
