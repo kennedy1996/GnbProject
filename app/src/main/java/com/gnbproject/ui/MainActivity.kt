@@ -1,6 +1,7 @@
 package com.gnbproject.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -50,6 +51,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkingLiveData() {
         viewModel.getTransaction()?.observe(this, Observer { list ->
+            if(list.isNotEmpty()) binding.activityMainProgressBar.visibility= View.GONE
+            else binding.activityMainProgressBar.visibility= View.VISIBLE
             adapterRecyclerView!!.notifyDataSetChanged()
         })
     }
